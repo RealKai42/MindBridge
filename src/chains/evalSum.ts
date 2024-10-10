@@ -31,8 +31,6 @@ export async function evalSum({ content, summary }: { content: string; summary: 
   const zodSchema = z.number().describe("scores ONLY");
   const zodParser = StructuredOutputParser.fromZodSchema(zodSchema);
 
-  const outputParser = new StringOutputParser();
-
   const chain = RunnableSequence.from([
     {
       coherence: async (input) => {

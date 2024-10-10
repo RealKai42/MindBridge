@@ -6,6 +6,7 @@ import { evalSum } from "./chains/evalSum";
 import { outputRender } from "./render";
 import fs from "fs";
 import { getFormattedDate } from "./utils";
+import { splitOnlyGenSum } from "./chains/splitOnlySum";
 
 export async function runTest({
   testName,
@@ -28,6 +29,15 @@ export async function runTest({
     summary: basicRes.summary,
   });
   const basicRenderResult = outputRender(basicRes, evalBasicRes);
+
+  const splitOnlyRes = await splitOnlyGenSum({
+    content,
+  });
+  const evalSplitOnlyRes = await evalSum({
+    content: splitOnlyRes.content,
+    summary: splitOnlyRes.summary,
+  });
+  const splitOnlyRenderResult = outputRender(splitOnlyRes, evalSplitOnlyRes);
 
   const splitRes = await splitGenSum({
     content,
@@ -75,6 +85,8 @@ export async function runTest({
 
 ${basicRenderResult}
   
+${splitOnlyRenderResult}
+
 ${splitRenderResult}
   
 ${associateRenderResult}
@@ -83,6 +95,7 @@ ${associateRenderResult}
   const results = {
     basic: { res: basicRes, evalRes: evalBasicRes },
     split: { res: splitRes, evalRes: evalSplitRes },
+    splitOnly: { res: splitOnlyRes, evalRes: evalSplitOnlyRes },
     associate: { res: associateRes, evalRes: evalAssociateRes },
   };
 
@@ -105,5 +118,9 @@ ${associateRenderResult}
   fs.writeFileSync(
     path.join(outputDir, "associateGenSum.json"),
     JSON.stringify(results.associate, null, 2)
+  );
+  fs.writeFileSync(
+    path.join(outputDir, "splitOnlyGenSum.json"),
+    JSON.stringify(results.splitOnly, null, 2)
   );
 }

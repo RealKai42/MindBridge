@@ -1,24 +1,30 @@
-import { AssociateOutput } from "./chains/associateGenSum";
 import { EvalSumOutput } from "./chains/evalSum";
 import { SplitOutput } from "./chains/splitGenSum";
 import { BasicOutput } from "./chains/basicGenSum";
 import { Output } from "./type";
+import { AssociateOutput } from "./chains/associateGenSum";
+
+export type splitOnlyOutput = {
+  type: string;
+  content: string;
+  contentLength: number;
+  sampledContent: string[];
+  sampledTotalSize: number;
+  summary: string;
+};
+
+function formatSummary(summary: string): string {
+  return summary.replace(/\n/g, "<br>");
+}
 
 function BasicRender(data: BasicOutput, evalData: EvalSumOutput): string {
-  let markdownContent = `# Basic Output Results\n\n`;
-  markdownContent += "| Content Length | Summary | Content Preview |\n";
-  markdownContent += "|----------------|---------|-----------------|\n";
+  let markdownContent = `## Basic Output Results\n\n`;
+  markdownContent += "| Content Length | Summary |\n";
+  markdownContent += "|----------------|---------|\n";
 
-  const contentPreview =
-    data.content.length > 100
-      ? `${data.content.slice(0, 50)}...${data.content.slice(-50)}`
-      : data.content;
+  markdownContent += `| ${data.contentLength} | ${formatSummary(data.summary)} |\n`;
 
-  markdownContent += `| ${data.contentLength} | ${data.summary} | ${escapeMarkdown(
-    contentPreview
-  )}} |\n`;
-
-  markdownContent += `\n# Evaluation Summary\n\n`;
+  markdownContent += `\n### Evaluation Summary\n\n`;
   markdownContent += "| Coherence | Consistency | Fluency | Relevance | Average |\n";
   markdownContent += "|-----------|-------------|---------|-----------|---------|\n";
   markdownContent += `| ${evalData.coherence} | ${evalData.consistency} | ${evalData.fluency} | ${evalData.relevance} | ${evalData.avg} |\n`;
@@ -27,20 +33,15 @@ function BasicRender(data: BasicOutput, evalData: EvalSumOutput): string {
 }
 
 function AssociateRender(data: AssociateOutput, evalData: EvalSumOutput): string {
-  let markdownContent = `# Associate Output Results\n\n`;
-  markdownContent += "| Content Length | Sampled Total Size | Summary | Content Preview |\n";
-  markdownContent += "|----------------|--------------------|---------|-----------------|\n";
+  let markdownContent = `## Associate Output Results\n\n`;
+  markdownContent += "| Content Length | Sampled Total Size | Summary |\n";
+  markdownContent += "|----------------|--------------------|---------|\n";
 
-  const contentPreview =
-    data.content.length > 100
-      ? `${data.content.slice(0, 50)}...${data.content.slice(-50)}`
-      : data.content;
-
-  markdownContent += `| ${data.contentLength} | ${data.sampledTotalSize} | ${
+  markdownContent += `| ${data.contentLength} | ${data.sampledTotalSize} | ${formatSummary(
     data.summary
-  } | ${escapeMarkdown(contentPreview)} |\n`;
+  )} |\n`;
 
-  markdownContent += `\n# Evaluation Summary\n\n`;
+  markdownContent += `\n### Evaluation Summary\n\n`;
   markdownContent += "| Coherence | Consistency | Fluency | Relevance | Average |\n";
   markdownContent += "|-----------|-------------|---------|-----------|---------|\n";
   markdownContent += `| ${evalData.coherence} | ${evalData.consistency} | ${evalData.fluency} | ${evalData.relevance} | ${evalData.avg} |\n`;
@@ -49,21 +50,15 @@ function AssociateRender(data: AssociateOutput, evalData: EvalSumOutput): string
 }
 
 function SplitRender(data: SplitOutput, evalData: EvalSumOutput): string {
-  let markdownContent = `# Split Output Results\n\n`;
-  markdownContent += "| Content Length | Sampled Total Size | Summary | Sampled Content |\n";
-  markdownContent += "|----------------|--------------------|---------|-----------------|\n";
+  let markdownContent = `## Split Output Results\n\n`;
+  markdownContent += "| Content Length | Sampled Total Size | Summary |\n";
+  markdownContent += "|----------------|--------------------|---------|\n";
 
-  const contentPreview = data.sampledContent
-    .map((content) =>
-      content.length > 100 ? `${content.slice(0, 50)}...${content.slice(-50)}` : content
-    )
-    .join(", ");
-
-  markdownContent += `| ${data.contentLength} | ${data.sampledTotalSize} | ${
+  markdownContent += `| ${data.contentLength} | ${data.sampledTotalSize} | ${formatSummary(
     data.summary
-  } | ${escapeMarkdown(contentPreview)} |\n`;
+  )} |\n`;
 
-  markdownContent += `\n# Evaluation Summary\n\n`;
+  markdownContent += `\n### Evaluation Summary\n\n`;
   markdownContent += "| Coherence | Consistency | Fluency | Relevance | Average |\n";
   markdownContent += "|-----------|-------------|---------|-----------|---------|\n";
   markdownContent += `| ${evalData.coherence} | ${evalData.consistency} | ${evalData.fluency} | ${evalData.relevance} | ${evalData.avg} |\n`;
@@ -71,7 +66,24 @@ function SplitRender(data: SplitOutput, evalData: EvalSumOutput): string {
   return markdownContent;
 }
 
-export function outputRender(data: Output, evalData: EvalSumOutput): string {
+function SplitOnlyRender(data: splitOnlyOutput, evalData: EvalSumOutput): string {
+  let markdownContent = `## Split Only Output Results\n\n`;
+  markdownContent += "| Content Length | Sampled Total Size | Summary |\n";
+  markdownContent += "|----------------|--------------------|---------|\n";
+
+  markdownContent += `| ${data.contentLength} | ${data.sampledTotalSize} | ${formatSummary(
+    data.summary
+  )} |\n`;
+
+  markdownContent += `\n### Evaluation Summary\n\n`;
+  markdownContent += "| Coherence | Consistency | Fluency | Relevance | Average |\n";
+  markdownContent += "|-----------|-------------|---------|-----------|---------|\n";
+  markdownContent += `| ${evalData.coherence} | ${evalData.consistency} | ${evalData.fluency} | ${evalData.relevance} | ${evalData.avg} |\n`;
+
+  return markdownContent;
+}
+
+export function outputRender(data: Output | splitOnlyOutput, evalData: EvalSumOutput): string {
   switch (data.type) {
     case "associateGenSum":
       return AssociateRender(data as AssociateOutput, evalData);
@@ -79,11 +91,9 @@ export function outputRender(data: Output, evalData: EvalSumOutput): string {
       return SplitRender(data as SplitOutput, evalData);
     case "basicGenSum":
       return BasicRender(data as BasicOutput, evalData);
+    case "splitOnlyGenSum":
+      return SplitOnlyRender(data as splitOnlyOutput, evalData);
     default:
       throw new Error("Invalid data type");
   }
-}
-
-function escapeMarkdown(text: string): string {
-  return text.replace(/[^，。,.\w\s]/g, "").replace(/\n/g, "");
 }
