@@ -1,0 +1,13 @@
+"testName","basicAvg","splitOnlyAvg","splitAvg","associateAvg","basicCoherence","basicConsistency","basicFluency","basicRelevance","splitOnlyCoherence","splitOnlyConsistency","splitOnlyFluency","splitOnlyRelevance","splitCoherence","splitConsistency","splitFluency","splitRelevance","associateCoherence","associateConsistency","associateFluency","associateRelevance"
+"Starbucks, Tetley, Jaguar Land Rover: Remembering Ratan Tata's global ambitions-2024-10-11-02-34-14",4.5,3.25,4,3.75,5,5,3,5,3,4,3,3,4,5,3,4,4,4,3,4
+"Tesla unveiling its long-awaited robotaxi amid doubts about the technology it runs on-2024-10-11-02-33-16",4,3,3.25,3.75,5,4,3,4,3,3,3,3,4,3,3,3,4,4,3,4
+"The Emperor's New Clothes-2024-10-11-02-34-00",4,3.75,4,4,4,5,3,4,4,4,3,4,5,4,3,4,5,3,3,5
+"The Little Match Girl-2024-10-11-02-33-22",4.5,3.5,4.5,4.5,5,5,3,5,4,3,3,4,5,5,3,5,5,5,3,5
+"Tribute to Diana-2024-10-11-02-33-17",4.5,3.75,4,3.75,5,5,3,5,4,4,3,4,4,5,3,4,4,4,3,4
+"Wildlife numbers fall by 73% in 50 years, global stocktake finds-2024-10-11-02-33-16",4.5,3,3.75,3.25,5,5,3,5,3,3,3,3,4,4,3,4,4,3,3,3
+"孔乙己-2024-10-11-02-34-33",4.5,3.75,4.5,3.5,5,5,3,5,4,4,3,4,5,5,3,5,4,3,3,4
+"欠债400万，中国“淘金客”在非洲“翻盘”-2024-10-11-02-34-05",4,3.5,3.25,3.5,4,5,3,4,4,4,3,3,3,4,3,3,4,4,3,3
+"汪曾祺《受戒》-2024-10-11-02-34-04",3.75,2.75,3,2.5,4,4,3,4,3,3,3,2,3,3,3,3,3,2,3,2
+"诺奖2024｜解读：miRNA与众多疾病相关，药物为何难落地？-2024-10-11-02-34-02",4.25,4,3.75,4,5,5,3,4,4,5,3,4,4,4,3,4,4,5,3,4
+"诺贝尔文学奖丨韩江：人性问题从小跟随我-2024-10-11-02-34-39",4.25,4,3,3.75,5,5,3,4,4,5,3,4,3,3,3,3,4,4,3,4
+"Average",4.278,3.5,3.722,3.694,4.778,4.889,3,4.444,3.667,3.778,3,3.556,4,4.111,3,3.778,4.111,3.778,3,3.889
