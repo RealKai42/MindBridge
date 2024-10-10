@@ -134,34 +134,27 @@ async function generateCSV() {
   // Calculate averages
   const averages: TestResults = {
     testName: "Average",
-    basicCoherence: csvData.reduce((sum, row) => sum + row.basicCoherence, 0) / csvData.length,
-    basicConsistency: csvData.reduce((sum, row) => sum + row.basicConsistency, 0) / csvData.length,
-    basicFluency: csvData.reduce((sum, row) => sum + row.basicFluency, 0) / csvData.length,
-    basicRelevance: csvData.reduce((sum, row) => sum + row.basicRelevance, 0) / csvData.length,
-    basicAvg: csvData.reduce((sum, row) => sum + row.basicAvg, 0) / csvData.length,
-    splitCoherence: csvData.reduce((sum, row) => sum + row.splitCoherence, 0) / csvData.length,
-    splitConsistency: csvData.reduce((sum, row) => sum + row.splitConsistency, 0) / csvData.length,
-    splitFluency: csvData.reduce((sum, row) => sum + row.splitFluency, 0) / csvData.length,
-    splitRelevance: csvData.reduce((sum, row) => sum + row.splitRelevance, 0) / csvData.length,
-    splitAvg: csvData.reduce((sum, row) => sum + row.splitAvg, 0) / csvData.length,
-    associateCoherence:
-      csvData.reduce((sum, row) => sum + row.associateCoherence, 0) / csvData.length,
-    associateConsistency:
-      csvData.reduce((sum, row) => sum + row.associateConsistency, 0) / csvData.length,
-    associateFluency: csvData.reduce((sum, row) => sum + row.associateFluency, 0) / csvData.length,
-    associateRelevance:
-      csvData.reduce((sum, row) => sum + row.associateRelevance, 0) / csvData.length,
-    associateAvg: csvData.reduce((sum, row) => sum + row.associateAvg, 0) / csvData.length,
-    splitOnlyCoherence:
-      csvData.reduce((sum, row) => sum + row.splitOnlyCoherence, 0) / csvData.length,
-    splitOnlyConsistency:
-      csvData.reduce((sum, row) => sum + row.splitOnlyConsistency, 0) / csvData.length,
-    splitOnlyFluency: csvData.reduce((sum, row) => sum + row.splitOnlyFluency, 0) / csvData.length,
-    splitOnlyRelevance:
-      csvData.reduce((sum, row) => sum + row.splitOnlyRelevance, 0) / csvData.length,
-    splitOnlyAvg: csvData.reduce((sum, row) => sum + row.splitOnlyAvg, 0) / csvData.length,
+    basicCoherence: calculateAverage(csvData.map((row) => row.basicCoherence)),
+    basicConsistency: calculateAverage(csvData.map((row) => row.basicConsistency)),
+    basicFluency: calculateAverage(csvData.map((row) => row.basicFluency)),
+    basicRelevance: calculateAverage(csvData.map((row) => row.basicRelevance)),
+    basicAvg: calculateAverage(csvData.map((row) => row.basicAvg)),
+    splitCoherence: calculateAverage(csvData.map((row) => row.splitCoherence)),
+    splitConsistency: calculateAverage(csvData.map((row) => row.splitConsistency)),
+    splitFluency: calculateAverage(csvData.map((row) => row.splitFluency)),
+    splitRelevance: calculateAverage(csvData.map((row) => row.splitRelevance)),
+    splitAvg: calculateAverage(csvData.map((row) => row.splitAvg)),
+    associateCoherence: calculateAverage(csvData.map((row) => row.associateCoherence)),
+    associateConsistency: calculateAverage(csvData.map((row) => row.associateConsistency)),
+    associateFluency: calculateAverage(csvData.map((row) => row.associateFluency)),
+    associateRelevance: calculateAverage(csvData.map((row) => row.associateRelevance)),
+    associateAvg: calculateAverage(csvData.map((row) => row.associateAvg)),
+    splitOnlyCoherence: calculateAverage(csvData.map((row) => row.splitOnlyCoherence)),
+    splitOnlyConsistency: calculateAverage(csvData.map((row) => row.splitOnlyConsistency)),
+    splitOnlyFluency: calculateAverage(csvData.map((row) => row.splitOnlyFluency)),
+    splitOnlyRelevance: calculateAverage(csvData.map((row) => row.splitOnlyRelevance)),
+    splitOnlyAvg: calculateAverage(csvData.map((row) => row.splitOnlyAvg)),
   };
-
   csvData.push(averages);
 
   const csv = parse(csvData, { fields: csvFields });
@@ -169,6 +162,17 @@ async function generateCSV() {
   await fs.writeFile(path.join(sumTestDir, `results-${getFormattedDate()}.csv`), csv);
 
   console.log("CSV file has been generated successfully.");
+}
+
+function calculateAverage(values: number[]): number {
+  if (values.length <= 2) {
+    return parseFloat((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(3));
+  }
+
+  const sortedValues = values.slice().sort((a, b) => a - b);
+  const trimmedValues = sortedValues.slice(1, -1); // Remove the highest and lowest values
+  const average = trimmedValues.reduce((sum, value) => sum + value, 0) / trimmedValues.length;
+  return parseFloat(average.toFixed(3));
 }
 
 generateCSV().catch((error) => {
