@@ -165,16 +165,14 @@ async function generateCSV() {
 }
 
 function calculateAverage(values: number[]): number {
-  if (values.length <= 2) {
-    return parseFloat((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(3));
+  if (values.length === 0) {
+    return 0;
   }
 
-  const sortedValues = values.slice().sort((a, b) => a - b);
-  const trimmedValues = sortedValues.slice(1, -1); // Remove the highest and lowest values
-  const average = trimmedValues.reduce((sum, value) => sum + value, 0) / trimmedValues.length;
+  const sum = values.reduce((acc, value) => acc + value, 0);
+  const average = sum / values.length;
   return parseFloat(average.toFixed(3));
 }
-
 generateCSV().catch((error) => {
   console.error("Error generating CSV:", error);
 });
