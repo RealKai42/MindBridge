@@ -5,6 +5,10 @@
   <strong>Exploring AI’s empathy and associative reasoning.</strong>
 </p>
 
+<p align="center">
+  <a href="./README_EN.md">English</a>  
+</p>
+
 ## 写在前面
 这并不是一个 实战/应用 的项目，而是一个探索性的项目。我们希望通过这个项目，探索 AI 在情感和联想推理方面的能力。   
 
